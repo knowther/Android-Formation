@@ -4,4 +4,7 @@
     <string name="phone">Phone</string>
     <string name="name">Name</string>
     <string name="save">Save</string>
+    <string name="bar_title">Student List</string>
+    <string name="add_student_title_bar">Cadastrar Aluno</string>
+    <string name="edit_student_app_bar">Editar Estudante</string>
 </resources>

@@ -1,5 +1,7 @@
 package br.com.alura.agenda.ui.activity;
 
+import static br.com.alura.agenda.ui.activity.ConstraintsActivity.KEY_STUDENT;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,11 +24,18 @@ import br.com.alura.agenda.model.Student;
 
 public class StudentListActivity extends AppCompatActivity {
 
+    private StudentDAO dao;
+    public final String TITLE_APPBAR =  getString(R.string.bar_title);
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dao = new StudentDAO();
         setContentView(R.layout.activity_student_list);
-        setTitle("Lista de Alunos");
+        setTitle(TITLE_APPBAR);
+        dao.save(new Student(1,"Johnny", "12345613", "teste@teste.com"));
         FloatingActionButton addStudentButton = findViewById(R.id.floatingActionButton7);
         addStudentButton.setOnClickListener(view -> {
            openFormActivity();
@@ -46,17 +55,23 @@ public class StudentListActivity extends AppCompatActivity {
     }
 
     private void configList(){
-        StudentDAO dao = new StudentDAO();
-        dao.save(new Student("Johnny", "12345613", "teste@teste.com"));
         final ListView studentList = findViewById(R.id.activity_main_list_view);
         final List<Student> students = dao.getStudents();
         studentList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dao.getStudents()));
-        studentList.setOnItemClickListener((adapterView, view, position, id) -> {
-            Student selectedStudent = students.get(position);
-          Intent goToFormActivity =  new Intent(StudentListActivity.this, StudentFormActivity.class);
-          goToFormActivity.putExtra("student", selectedStudent);
-          startActivity(goToFormActivity);
-        });
+        configClickListener(studentList);
 
+    }
+
+    private void configClickListener(ListView studentList) {
+        studentList.setOnItemClickListener((adapterView, view, position, id) -> {
+            Student selectedStudent = (Student) adapterView.getItemAtPosition(position);
+            openEditableForm(selectedStudent);
+        });
+    }
+
+    private void openEditableForm(Student selectedStudent) {
+        Intent goToFormActivity =  new Intent(StudentListActivity.this, StudentFormActivity.class);
+        goToFormActivity.putExtra(KEY_STUDENT, selectedStudent);
+        startActivity(goToFormActivity);
     }
 }

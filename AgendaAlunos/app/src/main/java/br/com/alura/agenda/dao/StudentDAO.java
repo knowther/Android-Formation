@@ -1,5 +1,7 @@
 package br.com.alura.agenda.dao;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class StudentDAO {
 
     public void edit(Student student){
         Student studentFinded = null;
+        Log.i("student", "edit: " + student);
         for(Student s : students){
             if(s.getId() == student.getId()){
                 studentFinded = s;
@@ -27,6 +30,7 @@ public class StudentDAO {
         }
         if (studentFinded != null){
           int studentPosition =  students.indexOf(studentFinded);
+            Log.i("position:", "edit: "+ studentPosition);
           students.set(studentPosition, student);
         }
     }
